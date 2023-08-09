@@ -26,7 +26,7 @@ class BirdsViewModel : ViewModel() {
         updateImages()
     }
 
-    fun updateImages(){
+    fun updateImages() {
         viewModelScope.launch {
             val images = getImages()
             _uiState.update {
@@ -43,11 +43,24 @@ class BirdsViewModel : ViewModel() {
         return images
     }
 
+    fun selectCategory(category: String) {
+        _uiState.update {
+            it.copy(
+                selectedCategory = category
+            )
+        }
+
+    }
+
     override fun onCleared() {
         httpClient.close()
     }
 }
 
 data class BirdsUiState(
-    val images: List<BirdImage> = emptyList()
-)
+    val images: List<BirdImage> = emptyList(),
+    val selectedCategory: String? = null
+) {
+    val categories = images.map { it.category }.toSet()
+    val selectedImages = images.filter { it.category == selectedCategory }
+}
