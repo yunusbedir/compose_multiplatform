@@ -29,10 +29,6 @@ fun App() {
         var greetingText by remember { mutableStateOf("Hello, World!") }
         var showImage by remember { mutableStateOf(false) }
 
-        LaunchedEffect(key1 = Unit) {
-            println(getImages())
-        }
-
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             Button(onClick = {
                 greetingText = "Hello, ${getPlatformName()}"
@@ -48,18 +44,6 @@ fun App() {
             }
         }
     }
-}
-
-val httpClient = HttpClient {
-    install(ContentNegotiation) {
-        json()
-    }
-}
-
-suspend fun getImages(): List<BirdImage> {
-    val images = httpClient.get("http://sebi.io/demo-image-api/pictures.json")
-        .body<List<BirdImage>>()
-    return images
 }
 
 expect fun getPlatformName(): String
